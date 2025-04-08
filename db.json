@@ -1,0 +1,25 @@
+{
+    "entregadores": [
+      {
+        "nome": "Fernando Augusto",
+        "tipo_veiculo": "Caminhão",
+        "tempo": "Parte em 2 dias"
+      },
+      {
+        "nome": "Gabriel Gv",
+        "tipo_veiculo": "Carro",
+        "tempo": "Parte em 5 horas"
+      },
+      {
+        "nome": "Genilson Magnifico",
+        "tipo_veiculo": "Moto",
+        "tempo": "Parte em 30 minutos"
+      },
+      {
+        "nome": "Van Escolar",
+        "tipo_veiculo": "Van",
+        "tempo": "Parte amanhã"
+      }
+    ]
+  }
+  

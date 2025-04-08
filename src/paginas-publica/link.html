@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo</title>
+  <!-- CSS Integrado -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    header {
+      background: #333;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    section {
+      margin: 20px;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #555;
+      color: white;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button.remover {
+      background: #dc3545;
+    }
+  </style>
+  <!-- Google Charts Loader -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Painel Administrativo</h1>
+    <nav>
+      <ul>
+        <li><a href="#usuarios">Usuários</a></li>
+        <li><a href="#pedidos">Pedidos</a></li>
+        <li><a href="#estatisticas">Estatísticas</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Seção de Gerenciamento de Usuários -->
+  <section id="usuarios">
+    <h2>Gerenciamento de Usuários</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Tipo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaUsuarios">
+        <!-- Usuários serão carregados via JavaScript -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Seção de Controle de Pedidos -->
+  <section id="pedidos">
+    <h2>Controle de Pedidos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pedido</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaPedidos">
+        <!-- Pedidos serão carregados via JavaScript -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Seção de Estatísticas -->
+  <section id="estatisticas">
+    <h2>Estatísticas do Sistema</h2>
+    <div id="graficoPedidos" style="width: 100%; height: 400px;"></div>
+  </section>
+
+  <!-- JavaScript Integrado -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Dados de exemplo
+      let usuarios = [
+        { nome: "João Silva", email: "joao@email.com", tipo: "Produtor" },
+        { nome: "Transportadora XYZ", email: "xyz@email.com", tipo: "Transportadora" }
+      ];
+      
+      let pedidos = [
+        { pedido: "Transporte de Milho", cliente: "João Silva", status: "Em Andamento" },
+        { pedido: "Transporte de Soja", cliente: "Maria Souza", status: "Concluído" }
+      ];
+  
+      // Carregar usuários na tabela
+      let tabelaUsuarios = document.getElementById("tabelaUsuarios");
+      usuarios.forEach(user => {
+        let linha = `<tr>
+          <td>${user.nome}</td>
+          <td>${user.email}</td>
+          <td>${user.tipo}</td>
+          <td><button class="remover">Remover</button></td>
+        </tr>`;
+        tabelaUsuarios.innerHTML += linha;
+      });
+  
+      // Carregar pedidos na tabela
+      let tabelaPedidos = document.getElementById("tabelaPedidos");
+      pedidos.forEach(pedido => {
+        let linha = `<tr>
+          <td>${pedido.pedido}</td>
+          <td>${pedido.cliente}</td>
+          <td>${pedido.status}</td>
+          <td><button class="remover">Cancelar</button></td>
+        </tr>`;
+        tabelaPedidos.innerHTML += linha;
+      });
+  
+      // Estatísticas com Google Charts
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(drawChart);
+  
+      function drawChart() {
+        let data = google.visualization.arrayToDataTable([
+          ["Status", "Pedidos"],
+          ["Em Andamento", pedidos.filter(p => p.status === "Em Andamento").length],
+          ["Concluído", pedidos.filter(p => p.status === "Concluído").length]
+        ]);
+  
+        let options = {
+          title: "Status dos Pedidos",
+          pieHole: 0.4
+        };
+  
+        let chart = new google.visualization.PieChart(document.getElementById("graficoPedidos"));
+        chart.draw(data, options);
+      }
+    });
+  </script>
+</body>
+</html>
