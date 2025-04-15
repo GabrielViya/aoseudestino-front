@@ -66,8 +66,8 @@
             <h2>Entrega Segura</h2>
             <div class="delivery-content">
                 <i class="fas fa-truck"></i>
-                <p>Nossa entrega garante que seus itens sejam entregues diretamente na sua porta.</p>
-                <p>Métodos de Pagamento: <strong>Pagamento na Entrega</strong> ou <strong>Pagamento Online</strong>.</p>
+                <p>Nossa entrega garante que seus Produtos Agrícolas sejam entregues em perfeitas condições.</p>
+                <p>Método de Pagamento: <strong>Pagamento na Entrega</strong> </p>
             </div>
         </section>
 
@@ -108,6 +108,7 @@ export default{
             },
             
             async listar (){
+                
             //   buscando os dados na api
               const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_pedido")
        

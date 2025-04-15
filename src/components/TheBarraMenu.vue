@@ -39,7 +39,7 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #28a745;
+    background-color: #45a049;
     z-index: 1000;
 }
 

@@ -10,19 +10,16 @@
                     <img src="/foto1.jpg" alt="Foto de FERNANDO AUGUSTO ">
                 </div>
                 <h1>Perfil</h1>
-                <p>(+244) 933102442</p>
-                <p>Disponível</p>
+                <p>(+244) {{ perfil.telefone }}</p>
+                <p color="" @click="sair">Sair</p>
             </div>
         </header>
 
         <main class="dados">
             <!-- Campo "nome" -->
 
-               <h1>Fernando Augusto</h1>
-            <p>009295HA042</p>
-            <p>Lubango</p>
-            <p>Lage</p>{{  }}
-
+            <h1>{{ perfil.name }}</h1>
+            <p>{{ perfil.email }}</p>
 
         </main>
 
@@ -33,8 +30,8 @@
 
     <script>
     import TheBarraMenu from '@/components/TheBarraMenu.vue';
-import TheTopo from '@/components/TheTopo.vue';
-import axios from "axios"
+    import TheTopo from '@/components/TheTopo.vue';
+    import axios from "axios"
 
     export default {
         components:{
@@ -44,20 +41,48 @@ import axios from "axios"
 
         data(){
             return {
-               entregadores: []
+                perfil:[]
+                
             }
         },
 
         methods: {
-            detalhar(){
-                this.$router.push("/perfil")
-            },
+            async detalhar (){
+            //   buscando os dados na api
+            try {
+                const user=JSON.parse(localStorage.getItem('user'))
+                const id=user.id
 
-           
+                if(user.perfil == "cliente") {
+                    const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_cliente?id_usuario="+id)
+                    this.perfil = response.data.data[0]
+                } else {
+                    const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_entregador?id_usuario="+id)
+                    this.perfil = response.data.data.data[0]
+                }
+       
+            //   colocando os dados na variavel entregadores
+              
+              console.log(this.perfil)
+                
+            } catch (error) {
+                
+            }
+              
+            },
+            sair(){
+                localStorage.removeItem('user')
+                localStorage.removeItem('token')
+                this.$router.push('/')
+            }
+
         },
 
         created(){
-            
+            if(!localStorage.getItem('token')){
+                this.$router.push('/login')
+            }
+            this.detalhar()
         }
     }
     </script>

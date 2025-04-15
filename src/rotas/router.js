@@ -11,8 +11,8 @@ import ClienteAddPagina from "@/paginas-admin/ClienteaddPagina.vue";
 import EncomendaPagina from "@/paginas-admin/EncomendaPagina.vue";
 import FazerPedidoPagina from "@/paginas-publica/FazerPedidoPagina.vue";
 import EntregadoresPagina from "@/paginas-publica/EntregadoresPagina.vue";
-import PedidoEntregadorPagina from "@/paginas-publica/PedidoEntregadorPagina.vue"
-
+import PedidoEntregadorPagina from "@/paginas-publica/PedidoEntregadorPagina.vue";
+import SenhaPagina from "@/paginas-publica/SenhaPagina.vue"
 
 
 
@@ -29,7 +29,8 @@ const routes = [
     {path: '/encomenda', component:EncomendaPagina},
     {path: '/entregadores', component: EntregadoresPagina},
     {path: '/fazer-pedido', component: FazerPedidoPagina},
-    {path: '/pedido-entregador', component: PedidoEntregadorPagina}
+    {path: '/pedido-entregador', component: PedidoEntregadorPagina},
+    {path: '/senha', component: SenhaPagina}
     
     
 

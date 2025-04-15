@@ -4,7 +4,7 @@
 
     <div class="contacts-container">
                     <h1>Transportadores</h1>
-                    <div class="contact-list">
+                    <div class="contact-list" style="overflow: hidden;">
 
 
                         <div v-for="item in entregadores" :key="item.id" class="contact" >
@@ -39,21 +39,21 @@
                                     <i class="fas fa-phone-alt"></i> 927860828<br>
                                 </div>
                                 <div class="ver-msg">
-                                    <div class="cliente-msg">
+                                    <div class="cliente-msg" v-for="item in mensagens" :key="item.id">
                                         <div class="cliente-box-msg">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est nulla blanditiis tempora laborum molestias atque saepe nisi ea eos, voluptas amet natus architecto ab facere provident necessitatibus assumenda excepturi non.
+                                            {{ item.mensagem }}
                                         </div>
                                     </div>
-                                    <div class="entregador-msg">
+                                    <!-- <div class="entregador-msg">
                                         <div class="entregador-box-msg">
                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis id temporibus deserunt velit minima atque laudantium amet distinctio iste nemo eveniet veniam perspiciatis et voluptatem ex repudiandae, libero doloribus facere?
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="enviar-msg">
                                    <div>
-                                    <input type="text" placeholder="conversar">
-                                    <i class="fas fa-paper-plane"></i>
+                                    <input type="text" placeholder="conversar" v-model="conteudoMsg">
+                                    <i class="fas fa-paper-plane" @click="enviarMsg"></i>
                                    </div>
                                    <div >
 
@@ -85,11 +85,12 @@ import axios from "axios"
 
         data(){
             return {
-               entregadores: [], 
-               exibirMsg:false   
-               
-              
+               entregadores: [],
+               mensagens: [],
+               exibirMsg:false,
+               conteudoMsg:""
             }
+
         },
 
         methods: {
@@ -97,11 +98,6 @@ import axios from "axios"
                 if (event.target === event.currentTarget) { // Só executa se o clique for no .fundo
                     this.exibirMsg = !this.exibirMsg;
                 }
-                function sendSMS() {
-            const phoneNumber = "5511999999999";
-            const message = "Olá!";
-            window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
-        }
             },
             detalhar(){
                 this.$router.push("/solicitacao")
@@ -112,15 +108,50 @@ import axios from "axios"
               const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_entregador")
        
             //   colocando os dados na variavel entregadores
-              this.entregadores = response.data
+              this.entregadores = response.data.data.data
 
 
               console.log(this.entregadores)
-            }
+            },
+
+            async listarMsg (){
+            //   buscando os dados na api
+              const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_conversas?id_entregador=2&id_cliente=3")
+       
+            //   colocando os dados na variavel entregadores
+              this.mensagens = response.data
+
+              console.log(this.mensagens)
+            },
+            
+            async enviarMsg (){
+                const data={
+                    "id_entregador":"2",
+                    "id_cliente":"3",
+                    "mensagem":this.conteudoMsg,
+                    "status":"enviada"
+                }
+
+                try {
+                    //   buscando os dados na api
+                    const response = await axios.post("https://destino-api.crmcruzeiro.online/api/cadastro_conversas", data)
+
+                    if(response) {
+                        this.conteudoMsg=""
+                        this.listarMsg()
+                    }
+                } catch (error) {
+                    
+                }
+        },
+            
+
         },
 
         created(){
             this.listar()
+
+            this.listarMsg ()
         }
     }
 </script>

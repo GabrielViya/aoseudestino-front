@@ -8,11 +8,11 @@
 
             <div class="input-group">
                 <label for="email">Número de Telefone</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" v-model="user.email" required>
             </div>
             <div class="input-group">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" required>
+                <input type="password" id="senha" name="senha" v-model="user.password" required>
             </div>
            
             <button type="button" @click="entrar()">Entrar</button>
@@ -27,6 +27,7 @@
 
 <script>
     import axios from "axios"
+    import Swal from 'sweetalert2'
 
     export default {
              components: {
@@ -35,21 +36,40 @@
 
              data() {
                 return{
-                    produtos: []
+                    produtos: [],
+                    id: "",
+                    user: {
+                        email: "",
+                        password: ""
+                    }
+
                 }
              },
 
              methods: {
                 async entrar(){
-                    const data={
-                        "email": "g@gmail.com",
-                        "password": "12345678"
-                    }
+                
+                    // const data={
+                    //     "email": "g@gmail.com",
+                    //     "password": "12345678"
+                    // }
 
                 try{
-                    const response = await axios.post("https://destino-api.crmcruzeiro.online/api/login",data)
+                    const response = await axios.post("https://destino-api.crmcruzeiro.online/api/login",this.user)
 
                     if(response) {
+
+                        console.log(response.data.user)
+                       
+                        if(response.data.user.perfil == "entregador"){
+                         
+                            this.$router.push("/pedido-entregador")
+                        }
+                        else{
+                         
+                            this.$router.push("/pedidos")
+                        }
+
                         const user = JSON.stringify(response.data.user)
                         const token = response.data.token
     
@@ -58,22 +78,38 @@
 
                         // Depois de fazer o login verifica se existe algum pedido
                         // guardado, e regista este pedido
+                        let data = null
+                        let id_pedido = null
+                        
                         if(localStorage.getItem("pedido_temp")) {
                             if(localStorage.getItem("token")) {
-                                let id_pedido=null
 
-                                const data = JSON.parse(localStorage.getItem("pedido_temp"))
+                                data = JSON.parse(localStorage.getItem("pedido_temp"))
                                 this.produtos = JSON.parse(localStorage.getItem("produtos_temp"))
 
                                 localStorage.removeItem("pedido_temp")
                                 localStorage.removeItem("produtos_temp")
 
-                                this.$router.push("/pedidos")
+                                // this.$router.push("/pedidos")
                             }
+
+                            // Buscar o id do cliente
+                            const user= JSON.parse(localStorage.getItem("user"))
+                            
+                            const cliente = await axios("https://destino-api.crmcruzeiro.online/api/listar_cliente?id_usuario="+user.id)
+
+                            this.id = cliente.data.data[0].id
+
+                            data.id_cliente = this.id
 
                             await axios.post("https://destino-api.crmcruzeiro.online/api/cadastrar_pedido", data).then( (response)=>{
                                 console.log(response.data.data)
                                 id_pedido=response.data.data.id
+                            });
+
+                            // Atualizando todos os produtos com o ID do pedido
+                            this.produtos.forEach(produto => {
+                                produto.id_pedido = id_pedido;
                             });
 
                             try {
@@ -87,10 +123,6 @@
                             } catch (error) {
                                 console.error("Erro ao enviar os produtos:", error);
                             }
-                            // for (const produto of this.produtos) {
-                            // }
-                            // // Resetar ou redirecionar após o envio
-                            // this.produtos = Array.from({ length: this.cargas });
 
                             this.$router.push('/pedidos')
                         }
@@ -98,6 +130,12 @@
 
                 } catch(e) {
                     //msg de erro
+                    Swal.fire({
+                            title: '¡erro!',
+                            text: e.response.data.message,
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        })
 
                 }
 

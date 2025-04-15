@@ -11,7 +11,10 @@
             </div>
               
               <img src="/jp1.png" alt=" ">
-              <router-link to="/fazer-pedido" class="btn" style="position: fixed; left: 50%; transform: translateX(-50%); bottom: 85px;">Fazer Pedido</router-link>
+              <div  style="position: fixed; left: 50%; transform: translateX(-50%); bottom: 85px;">
+                <router-link to="/fazer-pedido" class="btn">Fazer Pedido</router-link>
+                <router-link to="/login" class="btn btn-entrar" v-show="btnEntrar">Entrar</router-link>
+              </div>
           </div>
       </div>
       <TheBarraMenu/>
@@ -26,13 +29,25 @@
       
   export default {
     components:{
-              TheTopo,
-              TheBarraMenu
-          },
+        TheTopo,
+        TheBarraMenu,
+    },
+    data() {
+            return {
+               btnEntrar:true 
+                    
+       }
+    },
     methods: {
       fazerPedido() {
         // Lógica para fazer o pedido
         alert('Pedido realizado com sucesso!');
+      }
+    },
+
+    created(){ 
+      if(localStorage.getItem('user')){
+        this.btnEntrar=false
       }
     }
   }
@@ -92,7 +107,7 @@
   .btn {
       display: inline-block;
       padding: 15px 40px;
-      background: #007bff;
+      background: #45a049;
       color: white;
       text-decoration: none;
       border-radius: 30px;
@@ -100,6 +115,13 @@
       transition: all 0.3s;
       border: 2px solid #45a049;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+
+  .btn-entrar{
+    margin-top: 10px;
+    background-color: rgb(74, 142, 231);
+    color: #fff;
+    border:none;
   }
   
   .btn:hover {

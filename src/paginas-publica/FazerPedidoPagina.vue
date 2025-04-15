@@ -30,7 +30,7 @@
                         <option value="">Selecione</option>
                         <option value="Fazenda Jamba">Fazenda Jamba</option>
                         <option value="Fazenda Nona">Fazenda Nona</option>
-                        <option value="Armazém Central">Armazém Central</option>
+                        <option value="Armazém Central">Mercado Municipal Da Humpata</option>
                     </select>
                 </div>
             </div>
@@ -76,23 +76,23 @@ export default{
     methods:{
         async add() {
             // Antes de registar o pedido, deve verificar se o usuario esta logado
-            // Se estiver faça o pedido se já peça login
+            // Se estiver faça o pedido se não já peça login
             
-            let id_pedido=null
+            let id_pedido = null
             const data = {
-                "id_cliente": 3, //Substituir pelo this.id
+                "id_cliente": this.id, //Substituir pelo this.id
                 "status":"em andamento"
             }
-
-            // Atualizando todos os produtos com o ID do pedido
-            this.produtos.forEach(produto => {
-                produto.id_pedido = id_pedido;
-            });
 
             if(localStorage.getItem("token")) {
                 await axios.post("https://destino-api.crmcruzeiro.online/api/cadastrar_pedido", data).then( (response)=>{
                     console.log(response.data.data)
                     id_pedido=response.data.data.id
+                });
+
+                // Atualizando todos os produtos com o ID do pedido
+                this.produtos.forEach(produto => {
+                    produto.id_pedido = id_pedido;
                 });
 
                 try {
@@ -124,6 +124,7 @@ export default{
 
         
         concluirpedido(){
+
         }
     },
 
@@ -141,12 +142,16 @@ export default{
 
     async created(){
         if(localStorage.getItem("user")){
-            const user= JSON.parse(localStorage.getItem("user"))
+            const user = JSON.parse(localStorage.getItem("user"))
 
-            this.id=user.id
-            console.log(this.id)
-
-            this.id = await axios("")
+            if(user.perfil == "entregador") {
+                this.$router.push("/pedido-entregador")
+            
+            } else {
+                const cliente = await axios("https://destino-api.crmcruzeiro.online/api/listar_cliente?id_usuario="+user.id)
+    
+                this.id = cliente.data.data[0].id
+            } 
 
         }
     }

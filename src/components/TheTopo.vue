@@ -4,6 +4,16 @@
             <!-- <div>
             <input type="text" id="trackNumber" placeholder="Digite o número de rastreamento">
             </div> -->
+        <div style="position: fixed; top: 15px; right: 20px;">
+            <router-link to="/notificacao">
+                <div style="position: relative;">
+                    <i class="fas fa-bell" style="font-size: 18px; color: #fff;"></i>
+                    <div style="width: 20px; height: 20px; background: red; border-radius: 50%; position: absolute; top: -10px; left: 5px; display: flex; justify-content: center; align-items: center; color: #fff;">
+                        1
+                    </div>
+                </div>
+            </router-link>
+        </div>    
         </header>
 </template>
 
@@ -18,7 +28,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #28a745;
+    background-color: #45a049;
     color: #fff;
     padding: 10px 0 !important;
     text-align: center;
