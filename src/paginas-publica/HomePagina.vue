@@ -12,7 +12,7 @@
               
               <img src="/jp1.png" alt=" ">
               <div  style="position: fixed; left: 50%; transform: translateX(-50%); bottom: 85px;">
-                <router-link to="/fazer-pedido" class="btn">Fazer Pedido</router-link>
+                <router-link to="/fazer-pedido" class="btn" v-show="fazerPedido">Fazer Pedido</router-link>
                 <router-link to="/login" class="btn btn-entrar" v-show="btnEntrar">Entrar</router-link>
               </div>
           </div>
@@ -34,7 +34,8 @@
     },
     data() {
             return {
-               btnEntrar:true 
+               btnEntrar:true,
+               fazerPedido: false
                     
        }
     },
@@ -48,6 +49,14 @@
     created(){ 
       if(localStorage.getItem('user')){
         this.btnEntrar=false
+
+        const user = JSON.parse(localStorage.getItem('user'))
+
+        if(user.perfil == "cliente") {
+          this.fazerPedido = true
+        }
+      } else {
+        this.fazerPedido = true
       }
     }
   }

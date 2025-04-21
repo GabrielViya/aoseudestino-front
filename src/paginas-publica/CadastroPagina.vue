@@ -4,7 +4,7 @@
         
         
 <div class="container">
-        <h2 style="color:darkcyan;">AO SEU DESTINO</h2>
+        <h2 style="color:darkcyan;">AgroEntrega</h2>
         <br>
         <form @submit.prevent="cadastrar">
             
@@ -163,9 +163,17 @@
             }
 
             } catch (e) {
+            let erros = ""
+
+
+
+            e.response?.data?.errors.password.forEach(el => {
+                erros = el
+            });
+
             Swal.fire({
                 title: "Erro!",
-                text: e.response?.data?.message || "Erro durante o processo.",
+                text: erros,
                 icon: "error",
                 confirmButtonText: "Ok",
             });

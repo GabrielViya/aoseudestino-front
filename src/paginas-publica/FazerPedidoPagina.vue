@@ -5,10 +5,10 @@
      <div class="form-container">
         <h1>📦 Informações para Entrega</h1>
         <form id="orderForm">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="numCargas">Número de Cargas:</label>
                 <input v-model="cargas" type="number" id="numCargas" min="1" value="1"  required>
-            </div>
+            </div> -->
 
             <div v-for="(produto, index) in produtos" :key="index">
             <div class="load-section">
@@ -21,7 +21,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Peso (kg):</label>
+                    <label>Nome do Produto</label>
+                    <input type="text" v-model="produto.nome_produto" required>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade de {{ produto.produto }}s:</label>
                     <input type="number" v-model="produto.quantidade" required>
                 </div>
                 <div class="form-group">
@@ -35,8 +39,15 @@
                 </div>
             </div>
         </div>
-
+        <div style="margin-bottom: 10px;">
+            <button type="button" style="width: 45px; height: 45px; padding: 0; border-radius: 50%;" class="d-flex justify-content-center align-items-center" @click="addCarga">
+                +
+            </button>
+        </div>
+        <div>
             <button type="button" @click="add">Concluir Pedido </button>
+        </div>
+
         </form>
     </div>
 </div>
@@ -63,9 +74,10 @@ export default{
     data() {
         return {
             id:"",
-            cargas: "", // Inicia com 1 para mostrar pelo menos um campo
+            cargas: "1", // Inicia com 1 para mostrar pelo menos um campo
               produtos: Array.from({ length: 0 }, () => ({
                 produto: "",
+                nome_produto: "",
                 quantidade: "",
                 localizacao: "",
                 id_pedido: ""
@@ -122,10 +134,16 @@ export default{
             } 
         },
 
-        
-        concluirpedido(){
-
+        addCarga() {
+            this.produtos.push({
+                produto: "",
+                nome_produto: "",
+                quantidade: "",
+                localizacao: "",
+                id_pedido: ""
+            });
         }
+
     },
 
     watch: {
@@ -133,14 +151,17 @@ export default{
         cargas(newVal) {
             this.produtos = Array.from({ length: newVal }, () => ({
                 produto: "",
+                nome_produto: "",
                 quantidade: "",
                 localizacao: "",
                 id_pedido: ""
             }));
-        }
+        },
     },
 
     async created(){
+        this.cargas = 1;
+
         if(localStorage.getItem("user")){
             const user = JSON.parse(localStorage.getItem("user"))
 

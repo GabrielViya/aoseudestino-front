@@ -12,8 +12,11 @@ import EncomendaPagina from "@/paginas-admin/EncomendaPagina.vue";
 import FazerPedidoPagina from "@/paginas-publica/FazerPedidoPagina.vue";
 import EntregadoresPagina from "@/paginas-publica/EntregadoresPagina.vue";
 import PedidoEntregadorPagina from "@/paginas-publica/PedidoEntregadorPagina.vue";
-import SenhaPagina from "@/paginas-publica/SenhaPagina.vue"
-
+import SenhaPagina from "@/paginas-publica/SenhaPagina.vue";
+import NotificacaoPagina from "@/paginas-publica/NotificacaoPagina.vue";
+import MensagensPagina from "@/paginas-publica/MensagensPagina.vue";
+import MapaPagina from "@/paginas-publica/MapaPagina.vue";
+import DetalharProdutoPagina from "@/paginas-publica/DetalharProdutoPagina.vue"
 
 
 const routes = [ 
@@ -30,11 +33,12 @@ const routes = [
     {path: '/entregadores', component: EntregadoresPagina},
     {path: '/fazer-pedido', component: FazerPedidoPagina},
     {path: '/pedido-entregador', component: PedidoEntregadorPagina},
-    {path: '/senha', component: SenhaPagina}
+    {path: '/notificacoes', component: NotificacaoPagina},
+    {path: '/senha', component: SenhaPagina},
+    {path: '/mensagens', component: MensagensPagina},
+    {path: '/mapa', component: MapaPagina},
+    {path: '/detalhar', component: DetalharProdutoPagina}
     
-    
-
-
 ];
 
 const router = createRouter({

@@ -3,7 +3,7 @@
 
     
 <div class="container">
-        <h2>AO SEU DESTINO</h2>
+        <h2>AgroEntrega</h2>
         <form action="#" method="POST">
 
             <div class="input-group">
@@ -12,8 +12,15 @@
             </div>
             <div class="input-group">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" v-model="user.password" required>
+                <input :type="tipo_senha" id="senha" name="senha" v-model="user.password" required>
             </div>
+
+            <div class="mostrar-senha">
+                <input type="checkbox" id="mostrar" v-model="showPassword" @change="verSenha">
+                <label for="mostrar" @click="verSenha">Mostrar senha</label>
+            </div>
+            <br>
+                
            
             <button type="button" @click="entrar()">Entrar</button>
 
@@ -35,18 +42,29 @@
              },
 
              data() {
-                return{
-                    produtos: [],
-                    id: "",
-                    user: {
-                        email: "",
-                        password: ""
-                    }
-
+                return {
+                produtos: [],
+                id: "",
+                showPassword: false, // Controle da visibilidade da senha
+                tipo_senha: "password",
+                user: {
+                    email: "",
+                    password: ""
                 }
-             },
+                }
+            },
 
              methods: {
+                verSenha(){
+                    // alert(this.showPassword)
+                    this.showPassword = !this.showPassword
+
+                    if(this.showPassword){
+                        this.tipo_senha = "text"
+                    } else {
+                        this.tipo_senha = "password"
+                    }
+                },
                 async entrar(){
                 
                     // const data={
@@ -163,6 +181,25 @@
             height: 100vh;
             background-color: #f4f4f4;
         }
+        .mostrar-senha {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.mostrar-senha label {
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    color: #666;
+}
+
+.mostrar-senha input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
 
         .container {
             background: #fff;

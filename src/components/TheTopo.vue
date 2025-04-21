@@ -1,13 +1,21 @@
 <template>
      <header class="fixed-header">
-            <h1>Ao Seu Destino</h1>
-            <!-- <div>
-            <input type="text" id="trackNumber" placeholder="Digite o número de rastreamento">
-            </div> -->
-        <div style="position: fixed; top: 15px; right: 20px;">
-            <router-link to="/notificacao">
+        <div style="position: fixed; top: 24px; left: 20px;">
+            <router-link to="/notificacoes">
                 <div style="position: relative;">
-                    <i class="fas fa-bell" style="font-size: 18px; color: #fff;"></i>
+                    <div style="width: 20px; height: 20px; background: red; border-radius: 50%; position: absolute; top: -10px; left: 5px; display: flex; justify-content: center; align-items: center; color: #fff;">
+                        <img src="/logo.jpeg" alt="" width="40" style="border-radius: 8px;">
+                    </div>
+                </div>
+            </router-link>
+        </div>  
+            
+        <h1>AgroEntrega</h1>
+        
+        <div style="position: fixed; top: 15px; right: 20px;">
+            <router-link to="/notificacoes">
+                <div style="position: relative;">
+                    <i class="bi bi-bell-fill" style="font-size: 18px; color: #fff;"></i>
                     <div style="width: 20px; height: 20px; background: red; border-radius: 50%; position: absolute; top: -10px; left: 5px; display: flex; justify-content: center; align-items: center; color: #fff;">
                         1
                     </div>

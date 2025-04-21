@@ -12,15 +12,6 @@
 
     <main>
         <!-- Campo para inserir o número de rastreamento -->
-        <!-- <section class="track-order">
-            <h2>Insira o Número de Rastreamento</h2>
-            <div class="track-input">
-                <input type="text" id="track-number" placeholder="Digite o número de rastreamento">
-                <button id="track-button">
-                    <i class="fas fa-search"></i> Rastrear
-                </button>
-            </div>
-        </section> -->
 
         <!-- Filtros de status -->
         <section class="order-filters">
@@ -53,9 +44,10 @@
                     <p>{{ item.created_at }}</p>
                     <br> 
                     <button @click="detalhar()" class="detalhar-btn">Detalhar</button>
-                    <button @click="SolicitarEntregador(item.id)" class="solicitar-btn">Solicitar Entregador</button>
+                    <button @click="SolicitarEntregador(item.id)" class="solicitar-btn">Solicitar</button>
+                    <button @click="Solicitados()" class="solicitado-btn">Solicitados (0)</button>
                 </div>
-
+                    
                
                 <!-- Adicione mais itens conforme necessário -->
             </div>
@@ -104,7 +96,7 @@ export default{
               
      
             detalhar(){
-                this.$router.push("/pedidos")
+                this.$router.push("/mapa")
             },
             
             async listar (){
@@ -309,6 +301,15 @@ h2 {
     border-radius: 4px;
     cursor: pointer;
     margin-right: 10px;
+}
+.solicitado-btn {
+    background-color: #15b6c2;
+    color: #333333; 
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
 }
 .solicitar-btn {
     background-color: #28a745; 

@@ -3,32 +3,49 @@
             <ul>
                 <li>
                     <router-link to="/home">
-                        <i class="fas fa-home"></i><span>Início</span>
+                        <i class="bi bi-house-door-fill"></i><span>Início</span>
                     </router-link>
                 </li>
                 <li> 
-                    <router-link to="/pedidos">
-                        <i class="fas fa-box"></i><span>Meus Pedidos</span>
+                    <router-link :to="pedido_url">
+                        <i class="bi bi-box-seam-fill"></i><span>Meus Pedidos</span>
+                    </router-link>
+
+                </li>
+                <li> 
+                    <router-link to="/mensagens">
+                        <i class="bi bi-chat-dots-fill"></i><span>Mensagens</span>
                     </router-link>
 
                     
                 </li>
-                <li> 
-                    <router-link to="/notificacao">
-                        <i class="fas fa-bell"></i><span>Notificações</span>
-                    </router-link>
 
-                    
-                </li>
-
-                <li><router-link to="/perfil"><i class="fas fa-user"></i><span>Perfil</span></router-link></li> 
+                <li><router-link to="/perfil"><i class="bi bi-person-fill"></i><span>Perfil</span></router-link></li> 
                    
             </ul>
         </footer>
 </template>
 
 <script>
+    export default {
+        data() {
+            return {
+                pedido_url: ""
+            }
+        },
 
+        created() {
+            
+            if(localStorage.getItem('user')) {
+                const user = JSON.parse(localStorage.getItem('user'))
+                if(user.perfil == "cliente") {
+                    this.pedido_url = "/pedidos"
+                } else {
+                    this.pedido_url = "/pedido-entregador"
+                }
+            }
+        }
+    }
 </script>
 
 <style scoped>

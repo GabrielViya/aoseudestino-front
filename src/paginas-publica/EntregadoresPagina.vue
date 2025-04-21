@@ -32,16 +32,16 @@
                         </div> -->
                         <div class="contente-msg">
                                 <div class="contente-barra-msg">
-                                    <div class="barra-msg"></div>
+                                    <div class="barra-msg" @click="acionarExibirMsg"></div>
                                     
                                 </div>
                                 <div style="padding-top: 15px; text-align: center;">
-                                    <i class="fas fa-phone-alt"></i> 927860828<br>
+                                    <i class="bi bi-telephone-outbound-fill"></i> 927860828<br>
                                 </div>
                                 <div class="ver-msg">
-                                    <div class="cliente-msg" v-for="item in mensagens" :key="item.id">
+                                    <div class="cliente-msg" v-for="item in this.mensagens" :key="item.id">
                                         <div class="cliente-box-msg">
-                                            {{ item.mensagem }}
+                                            {{ item.ultima_mensagem.conteudo }}
                                         </div>
                                     </div>
                                     <!-- <div class="entregador-msg">
@@ -53,10 +53,7 @@
                                 <div class="enviar-msg">
                                    <div>
                                     <input type="text" placeholder="conversar" v-model="conteudoMsg">
-                                    <i class="fas fa-paper-plane" @click="enviarMsg"></i>
-                                   </div>
-                                   <div >
-
+                                    <i class="bi bi-send-fill" @click="enviarMsg"></i>
                                    </div>
                                 </div>
                             </div>
@@ -116,25 +113,44 @@ import axios from "axios"
 
             async listarMsg (){
             //   buscando os dados na api
-              const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_conversas?id_entregador=2&id_cliente=3")
-       
-            //   colocando os dados na variavel entregadores
-              this.mensagens = response.data
+            try {
+                const token = localStorage.getItem("token");
 
-              console.log(this.mensagens)
+                const response = await axios.get("https://destino-api.crmcruzeiro.online/api/conversas", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                //   colocando os dados na variavel entregadores
+                  this.mensagens = response.data.data
+    
+                //   console.log(this.mensagens.ultima_mensagem.conteudo)
+            } catch (error) {
+                
+            }
             },
             
             async enviarMsg (){
+                
                 const data={
-                    "id_entregador":"2",
-                    "id_cliente":"3",
-                    "mensagem":this.conteudoMsg,
-                    "status":"enviada"
+                    "destinatario_id": 36,
+                    "conteudo": this.conteudoMsg
                 }
 
                 try {
-                    //   buscando os dados na api
-                    const response = await axios.post("https://destino-api.crmcruzeiro.online/api/cadastro_conversas", data)
+                    const token = localStorage.getItem("token");
+
+                    const response = await axios.post(
+                    "https://destino-api.crmcruzeiro.online/api/enviar_mensagem",
+                    data,
+                    {
+                        headers: {
+                        Authorization: `Bearer ${token}`
+                        }
+                    }
+                    );
+
 
                     if(response) {
                         this.conteudoMsg=""
@@ -280,7 +296,7 @@ h1 {
 .contente-msg{
     position: fixed;
     width: 100%;
-    height: 500px;
+    height: 600px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     background-color: #dfeedd;
@@ -301,7 +317,7 @@ h1 {
 
 .ver-msg{
     padding: 10px 15px;
-    height: 300px;
+    height: 375px;
     overflow: auto;
 }
 .enviar-msg{
