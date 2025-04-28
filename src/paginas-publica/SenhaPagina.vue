@@ -1,6 +1,6 @@
 <template>
     <div class="registration-form">
-      <h1>AO SEU DESTINO</h1>
+      <h1>AgroEntrega</h1>
       <h2>Conta Transportador</h2>
   
       <form @submit.prevent="submitForm">

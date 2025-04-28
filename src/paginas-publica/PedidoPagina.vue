@@ -17,18 +17,20 @@
         <section class="order-filters">
             <h2>Filtrar por Status</h2>
             <div class="filters">
-                <button class="filter-button active" data-status="all">
-                    <i class="fas fa-list"></i> Todos
-                </button>
-                <button class="filter-button" data-status="pending">
-                    <i class="fas fa-clock"></i> Aceite
-                </button>
-                <button class="filter-button" data-status="on-process">
-                    <i class="fas fa-truck-moving"></i> Em Processo
-                </button>
-                <button class="filter-button" data-status="delivered">
-                    <i class="fas fa-check-circle"></i> Entregue
-                </button>
+                <div class="row justify-content-space-between">
+                    <button class="col filter-button mb-3" data-status="on-process">
+                        <i class="fas fa-truck-moving"></i> Em Processo
+                    </button>
+                    <button class="col mx-2 filter-button mb-3" data-status="pending">
+                        <i class="fas fa-clock"></i> Aceite
+                    </button>
+                    <button class="col filter-button mb-3" data-status="delivered">
+                        <i class="fas fa-check-circle"></i> Entregue
+                    </button>
+                    <button class="col-12 filter-button active d-flex justify-content-center" data-status="all">
+                        <i class="fas fa-list"></i> Todos
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -42,10 +44,12 @@
                     <!-- <h3>{{ item.produto }}</h3> -->
                     <p>Status: <span class="status pending">{{ item.status }}</span></p>
                     <p>{{ item.created_at }}</p>
-                    <br> 
-                    <button @click="detalhar()" class="detalhar-btn">Detalhar</button>
-                    <button @click="SolicitarEntregador(item.id)" class="solicitar-btn">Solicitar</button>
-                    <button @click="Solicitados()" class="solicitado-btn">Solicitados (0)</button>
+                    <br>
+                    <div class="d-flex justify-content-space-between">
+                        <button @click="detalhar(item.id)" class="detalhar-btn">Detalhar</button>
+                        <button @click="SolicitarEntregador(item.id)" class="solicitar-btn">Solicitar</button>
+                        <button @click="Solicitados()" class="solicitado-btn">Solicitados (0)</button>
+                    </div>
                 </div>
                     
                
@@ -86,40 +90,83 @@ export default{
                pedidos: [
                 
                 {produto: ""}
-               ],    
+               ],
                
+               cliente_id: []
               
             }
         },
     
         methods:{
-              
+            async buscarCliente(){
+                try {
+                    let user = null
+
+                    if(localStorage.getItem("user"))
+                    {
+                        user = JSON.parse(localStorage.getItem("user"))    
+                    }
+
+                    const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_cliente?id_usuario="+user.id)
+    
+                    console.log(response.data.data.data[0])
+
+                    this.cliente_id = response.data.data.data[0].id
+
+                    try {
+                        const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_pedido?id_cliente="+this.cliente_id)
+                        this.pedidos = response.data 
+
+                        console.log(this.pedidos)
+                    } catch (error) {
+                        
+                    }
+                    
+                } catch (error) {
+                    
+                }
+            },
      
-            detalhar(){
-                this.$router.push("/mapa")
+            detalhar(id){
+                this.$router.push("/detalhar-pedido/"+id)
             },
             
-            async listar (){
+            // async listar (){
                 
-            //   buscando os dados na api
-              const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_pedido")
+                
+            //     if(this.buscarCliente()) {
+            //         //   buscando os dados na api
+            //         const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_pedido?id_cliente="+this.cliente_id)
+            //         this.pedidos = response.data
+      
+      
+            //         console.log(this.pedidos)
+            //     }
        
-            //   colocando os dados na variavel entregadores
-              this.pedidos = response.data
-
-
-              console.log(this.pedidos)
-            },
+            // //   colocando os dados na variavel entregadores
+            // },
 
             SolicitarEntregador(id){
-                this.$router.push("/entregadores")
+                this.$router.push("/entregadores/"+id)
+            },
+
+            async Solicitados() {
+                try {
+                    const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_solicitacao")
+                    
+                    console.log(response)
+
+                } catch (error) {
+                    
+                }
             }
 
         },
         
         
         created(){
-            this.listar()
+            // this.listar()
+            this.buscarCliente()
         }
     }
 

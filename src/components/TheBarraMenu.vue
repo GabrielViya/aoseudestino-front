@@ -41,7 +41,7 @@
                 if(user.perfil == "cliente") {
                     this.pedido_url = "/pedidos"
                 } else {
-                    this.pedido_url = "/pedido-entregador"
+                    this.pedido_url = "/solicitacao"
                 }
             }
         }

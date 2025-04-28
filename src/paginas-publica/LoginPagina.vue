@@ -34,7 +34,6 @@
 
 <script>
     import axios from "axios"
-    import Swal from 'sweetalert2'
 
     export default {
              components: {
@@ -81,7 +80,7 @@
                        
                         if(response.data.user.perfil == "entregador"){
                          
-                            this.$router.push("/pedido-entregador")
+                            this.$router.push("/solicitacao")
                         }
                         else{
                          
@@ -147,14 +146,7 @@
                     }
 
                 } catch(e) {
-                    //msg de erro
-                    Swal.fire({
-                            title: '¡erro!',
-                            text: e.response.data.message,
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar'
-                        })
-
+                    this.$notyf.open({ type: 'error', message: e.response.data.message })
                 }
 
                 }

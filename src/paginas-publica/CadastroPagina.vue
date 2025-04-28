@@ -53,7 +53,6 @@
 
 <script>
     import axios from "axios"
-    import Swal from 'sweetalert2'
 
     export default {
         components: {
@@ -157,7 +156,7 @@
                         }
 
             if (loginResponse.data.user.perfil === "entregador") {
-                this.$router.push("/pedido-entregador");
+                this.$router.push("/solicitacao");
             } else {
                 this.$router.push("/pedidos");
             }
@@ -171,26 +170,22 @@
                 erros = el
             });
 
-            Swal.fire({
-                title: "Erro!",
-                text: erros,
-                icon: "error",
-                confirmButtonText: "Ok",
-            });
+            this.$notyf.error(erros)
+
             } finally {
             this.isLoading = false;
             }
         },
         perfil(nome_perfil){
-            if(nome_perfil == "cliente"){
-                this.url_perfil ="https://destino-api.crmcruzeiro.online/api/cadastro_cliente"
-                this.conta = "Conta Cliente"
+                if(nome_perfil == "cliente"){
+                    this.url_perfil ="https://destino-api.crmcruzeiro.online/api/cadastro_cliente"
+                    this.conta = "Conta Cliente"
+                }
+                else{
+                    this.url_perfil="https://destino-api.crmcruzeiro.online/api/cadastrar_entregador"
+                    this.conta = "Conta Transportador"
+                }
             }
-            else{
-                this.url_perfil="https://destino-api.crmcruzeiro.online/api/cadastrar_entregador"
-                this.conta = "Conta Transportador"
-            }
-        }
         },
 
         created() {

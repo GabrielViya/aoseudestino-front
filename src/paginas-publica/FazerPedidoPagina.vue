@@ -13,27 +13,25 @@
             <div v-for="(produto, index) in produtos" :key="index">
             <div class="load-section">
                 <div class="form-group">
-                    <label>Tipo de Carga:</label>
+                    <label>Tipo de Carga</label>
                     <select v-model="produto.produto" required>
                         <option value="">Selecionar</option>
                         <option value="Saco">Saco</option>
                         <option value="Caixa">Caixa</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" v-show="produto.produto">
+                    <label>Quantidade de {{ produto.produto }}s</label>
+                    <input type="number" v-model="produto.quantidade" required>
+                </div>
+                <div class="form-group" v-show="produto.quantidade">
                     <label>Nome do Produto</label>
                     <input type="text" v-model="produto.nome_produto" required>
                 </div>
-                <div class="form-group">
-                    <label>Quantidade de {{ produto.produto }}s:</label>
-                    <input type="number" v-model="produto.quantidade" required>
-                </div>
-                <div class="form-group">
-                    <label>Localização:</label>
+                <div class="form-group" v-show="produto.nome_produto">
+                    <label>Localização</label>
                     <select v-model="produto.localizacao" required>
                         <option value="">Selecione</option>
-                        <option value="Fazenda Jamba">Fazenda Jamba</option>
-                        <option value="Fazenda Nona">Fazenda Nona</option>
                         <option value="Armazém Central">Mercado Municipal Da Humpata</option>
                     </select>
                 </div>
@@ -171,7 +169,7 @@ export default{
             } else {
                 const cliente = await axios("https://destino-api.crmcruzeiro.online/api/listar_cliente?id_usuario="+user.id)
     
-                this.id = cliente.data.data[0].id
+                this.id = cliente.data.data.data[0].id
             } 
 
         }

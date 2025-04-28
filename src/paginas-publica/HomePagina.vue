@@ -10,9 +10,9 @@
                 <h1>Serviços de<br>Entrega de<br>Produtos Agrícolas</h1>
             </div>
               
-              <img src="/jp1.png" alt=" ">
+              <img src="/jp1.png" alt="" class="img-fluid">
               <div  style="position: fixed; left: 50%; transform: translateX(-50%); bottom: 85px;">
-                <router-link to="/fazer-pedido" class="btn" v-show="fazerPedido">Fazer Pedido</router-link>
+                <router-link to="/fazer-pedido" class="btn" v-show="fazerPedido" style="width: 200px;">Fazer Pedido</router-link>
                 <router-link to="/login" class="btn btn-entrar" v-show="btnEntrar">Entrar</router-link>
               </div>
           </div>
@@ -73,7 +73,7 @@
   }
   .bg-gradient{
     background: rgb(140,171,204);
-    background: linear-gradient(179deg, rgba(140,171,204,1) 0%, rgba(39,226,244,0.6662980621936274) 57.99999999999999%, rgba(68,76,44,1) 100%);
+    background: linear-gradient(179deg, rgba(140,171,204,1) 0%, rgba(39,226,244,0.6662980621936274) 57.99999999999999%, rgba(68,76,44,1) 100%) !important;
   }
   .texto{
     padding: 30px 10px;

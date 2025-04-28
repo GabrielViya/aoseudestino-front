@@ -11,12 +11,11 @@ import ClienteAddPagina from "@/paginas-admin/ClienteaddPagina.vue";
 import EncomendaPagina from "@/paginas-admin/EncomendaPagina.vue";
 import FazerPedidoPagina from "@/paginas-publica/FazerPedidoPagina.vue";
 import EntregadoresPagina from "@/paginas-publica/EntregadoresPagina.vue";
-import PedidoEntregadorPagina from "@/paginas-publica/PedidoEntregadorPagina.vue";
 import SenhaPagina from "@/paginas-publica/SenhaPagina.vue";
 import NotificacaoPagina from "@/paginas-publica/NotificacaoPagina.vue";
 import MensagensPagina from "@/paginas-publica/MensagensPagina.vue";
 import MapaPagina from "@/paginas-publica/MapaPagina.vue";
-import DetalharProdutoPagina from "@/paginas-publica/DetalharProdutoPagina.vue"
+import DetalharProdutoPagina from "@/paginas-publica/DetalharProdutoPagina.vue";
 
 
 const routes = [ 
@@ -30,15 +29,13 @@ const routes = [
     {path: '/cliente', component:ClientePagina},
     {path: '/clienteadd', component:ClienteAddPagina},
     {path: '/encomenda', component:EncomendaPagina},
-    {path: '/entregadores', component: EntregadoresPagina},
+    {path: '/entregadores/:id', component: EntregadoresPagina},
     {path: '/fazer-pedido', component: FazerPedidoPagina},
-    {path: '/pedido-entregador', component: PedidoEntregadorPagina},
     {path: '/notificacoes', component: NotificacaoPagina},
     {path: '/senha', component: SenhaPagina},
     {path: '/mensagens', component: MensagensPagina},
     {path: '/mapa', component: MapaPagina},
-    {path: '/detalhar', component: DetalharProdutoPagina}
-    
+    {path: '/detalhar-pedido/:id', component: DetalharProdutoPagina}
 ];
 
 const router = createRouter({

@@ -6,7 +6,6 @@
                     <h1>Transportadores</h1>
                     <div class="contact-list" style="overflow: hidden;">
 
-
                         <div v-for="item in entregadores" :key="item.id" class="contact" >
                             <div class="profile-pic online">
                                 <div class="status-dot"></div>
@@ -20,7 +19,7 @@
                             <div class="tempo">
                                {{ item.tempo }}
                             </div>
-                            <div><button @click="acionarExibirMsg" class="button-solicitar">Solicitar</button></div>
+                            <div><button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="button-solicitar" @click="getIdEntregador(this, item.id)">Solicitar</button></div>
                         </div>
                         
 
@@ -63,7 +62,22 @@
 
                     </div>
     
-                
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center p-4">
+        Solicitar este Entregador?
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-success me-3" @click="fazerSolicitacao" data-bs-dismiss="modal">Sim</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+      </div>
+    </div>
+  </div>
+</div>         
     
 
     <TheBarraMenu/>
@@ -85,7 +99,9 @@ import axios from "axios"
                entregadores: [],
                mensagens: [],
                exibirMsg:false,
-               conteudoMsg:""
+               conteudoMsg:"",
+               id_entregador: "",
+               getEvent: ""
             }
 
         },
@@ -95,9 +111,50 @@ import axios from "axios"
                 if (event.target === event.currentTarget) { // Só executa se o clique for no .fundo
                     this.exibirMsg = !this.exibirMsg;
                 }
+
             },
+
             detalhar(){
                 this.$router.push("/solicitacao")
+            },
+
+            getIdEntregador(event, id) {
+                this.id_entregador = id 
+                this.getEvent = event
+            },      
+
+            async fazerSolicitacao(){
+                const id_pedido = this.$route.params.id
+
+                this.acionarExibirMsg(this.getEvent)
+                //Verificar 
+                if(this.exibirMsg) {
+                    const data= {
+                        "id_pedido": id_pedido,
+                        "id_entregador": this.id_entregador
+                    }
+
+                    try {
+                        const token = localStorage.getItem("token");
+
+                        const response = await axios.post("https://destino-api.crmcruzeiro.online/api/cadastrar_solicitacao",
+                        data,
+                        {
+                            headers: {
+                            Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        if(response) {
+                            this.$notyf.open({ type: 'error', message: erros })
+                        }
+
+                    } catch (error) {
+                        
+                    }
+                }
+
+
             },
 
             async listar (){
@@ -112,23 +169,23 @@ import axios from "axios"
             },
 
             async listarMsg (){
-            //   buscando os dados na api
-            try {
-                const token = localStorage.getItem("token");
+                //   buscando os dados na api
+                try {
+                    const token = localStorage.getItem("token");
 
-                const response = await axios.get("https://destino-api.crmcruzeiro.online/api/conversas", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                    const response = await axios.get("https://destino-api.crmcruzeiro.online/api/conversas", {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
 
-                //   colocando os dados na variavel entregadores
-                  this.mensagens = response.data.data
-    
-                //   console.log(this.mensagens.ultima_mensagem.conteudo)
-            } catch (error) {
-                
-            }
+                    //   colocando os dados na variavel entregadores
+                    this.mensagens = response.data.data
+        
+                    //   console.log(this.mensagens.ultima_mensagem.conteudo)
+                } catch (error) {
+                    
+                }
             },
             
             async enviarMsg (){

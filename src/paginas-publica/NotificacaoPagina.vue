@@ -1,12 +1,15 @@
 <template>
   <TheTopo/>
     <div class="notifications-container">
-      <h1 class="page-title">Notificações</h1>
+      <br><br>
+      <h1 class="page-title">Notificações ({{ notifications.length }})</h1>
       <div class="notifications-list">
         <div 
           v-for="notification in notifications"
           :key="notification.id"
-          class="notification-card" 
+          class="notification-card"
+          :class="{ visto: notification.status === 1 }" 
+          @click="verNotificacao(notification.id)"
         >
           <div class="notification-content">
             <h3 class="notification-title">{{ notification.tipo_de_notificacao }}</h3>
@@ -16,6 +19,7 @@
         </div>
       </div>
     </div>
+    <br><br>
     <TheBarraMenu/>
   </template>
   
@@ -31,35 +35,96 @@ export default {
     TheBarraMenu,
     TheTopo
   },
+  
   data() {
     return {
-      notifications: []
+      notifications: [],
     }
   },
+
   methods: {
    
-    async listarnotification (){
+    async listarnotification() {
+      try {
+        let id = null
+        if(localStorage.getItem("user")) {
+          const user = JSON.parse(localStorage.getItem("user"))
+          id = user.id
+        }
+        // Buscando os dados na API
+        const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_notificacoes?usuario_id="+id);
+
+        // Colocando os dados na variável notifications
+        this.notifications = response.data;
+
+        console.log(this.notifications);
+
+        const count = this.notifications.filter(n => n.status === 0).length;
+
+        localStorage.setItem("totalNotif", count)
+
+        if(localStorage.getItem("totalNotif")) {
+            this.totalNotif = localStorage.getItem("totalNotif")
+
+            if(this.totalNotif) {
+                this.bgDanger = "bg-danger"
+            } else {
+                this.bgDanger = ""
+            }
+        }
+
+        if(localStorage.getItem("totalNotif")) {
+            this.totalNotif = localStorage.getItem("totalNotif")
+        }
+
+        // Atualiza o total de notificações com status 0
+        this.updateTotalNotif();
+
+      } catch (error) {
+        console.error("Erro ao listar notificações:", error);
+      }
+    },
+
+    // Detalhar e editar
+    async verNotificacao(id) {
+      
+      const response = await axios.get("https://destino-api.crmcruzeiro.online/api/detalhar_notificacoes/"+id)
+
+      const token = localStorage.getItem("token")
+
+      // Clicar em notificação vamos mudar apenas o status
+      const data = {
+        ...response.data,
+        status: '1'
+      };
 
       try {
-        //   buscando os dados na api
-          const response = await axios.get("https://destino-api.crmcruzeiro.online/api/listar_notificacoes")
-   
-        //   colocando os dados na variavel entregadores
-          this.notifications = response.data
+              // agora você pode usar `data` em outra requisição, ou onde precisar
+            const response = await axios.put('https://destino-api.crmcruzeiro.online/api/atualizar_notificacoes/'+id, data, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
 
-          console.log(this.notifications)
+            if(response) {
+              this.listarnotification ()
 
+              //Levar pra outra pagina apos clicar na notificação
+              this.$router.push("/perfil")
+
+            }
+            
       } catch (error) {
         
       }
     },
-
-
   },
 
   created(){
-          this.listarnotification ()
-      }
+    this.listarnotification ()
+
+    if(localStorage.getItem("totalNotif")) {
+      const storedTotalNotif = localStorage.getItem("totalNotif");
+    }
+  }
    
   }
 
@@ -70,6 +135,10 @@ export default {
     padding: 2rem;
     background-color: #f0fff4;
     min-height: 100vh;
+  }
+
+  .visto {
+    background-color: #f0f0f0 !important;
   }
   
   .page-title {
